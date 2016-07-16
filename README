@@ -4,7 +4,7 @@ sudo apt-get install git
 2.) Cd rein in den Ordner in dem ihr das Projekt haben wollt.
 
 3.) Projekt über Git ziehen:
-git clone 
+git clone https://github.com/kcagras/AlarmBackend.git
 
 4.) Node und Npm installieren über folgende Befehle:
 wget https://nodejs.org/dist/v4.2.4/node-v4.2.4-linux-armv6l.tar.gz
