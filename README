@@ -1,0 +1,21 @@
+1.) Erstmal Git installieren:
+sudo apt-get install git
+
+2.) Cd rein in den Ordner in dem ihr das Projekt haben wollt.
+
+3.) Projekt über Git ziehen:
+git clone 
+
+4.) Node und Npm installieren über folgende Befehle:
+wget https://nodejs.org/dist/v4.2.4/node-v4.2.4-linux-armv6l.tar.gz
+sudo mv node-v4.2.4-linux-armv6l.tar.gz /opt
+cd /opt
+sudo tar -xzf node-v4.2.4-linux-armv6l.tar.gz
+sudo mv node-v4.2.4-linux-armv6l nodejs
+sudo rm node-v4.2.4-linux-armv6l.tar.gz
+sudo ln -s /opt/nodejs/bin/node /usr/bin/node
+sudo ln -s /opt/nodejs/bin/npm /usr/bin/npm
+
+5.) Cd rein in den Projektordner den ihr vorhin bei 3.) geklont habt.
+
+6.) server.js starten über den Befehl node server
