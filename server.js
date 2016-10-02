@@ -2,57 +2,73 @@ var express 		= require('express');
 var app     		= express();
 var morgan			= require ('morgan');
 var PythonShell 	= require ('python-shell');
+var fs				= require ('fs');
 
-var options = {
-	scriptPath: './python'
-};
-
+var dir				= '/home/pi/AlarmBackend/status.txt';
 var port = process.env.PORT || 8080;
-var enabled = false;
 
 app.use(morgan('dev'));
 var apiRoutes = express.Router();
+var enabled = true;
 
-var pyshell = new PythonShell('import_detector_v_0_1.py', { mode: 'text'});
+fs.writeFile(dir, 'start', function (err) {
+	if (err) throw err;
+});
+
+var pyshell = new PythonShell('import_detector_v_0_2.py', function (err) {
+		if (err) throw err;
+	});
 
 
 pyshell.on('message', function(msg) {
-	console.log(""+msg);
-	pyshell.end(function (err) {
-		if (err) throw err;
-		console.log('finished');
-	});
+	console.log("Received from Python: "+msg);
+
 });
 
-
-/*
 
 //================================
 // API-ROUTE FOR ENDISABLING
 //================================
 
 apiRoutes.get('/endisable', function(req, res) {
+
 	if (!enabled) {
-		PythonShell.run('import_detector_v_0_1.py', options, function (err, results) { 
-			if (err) 
-				throw err;
+		fs.writeFile(dir, 'start', function (err) {
+			if (err) throw err;
+			enabled = true;
+			res.status(200).send();
 		});
-		enabled = true;
-		console.log('Enabled Movement Detection.');
-		res.status(200).send();
 	}
 	else {
-		PythonShell.end('import_detector_v_0_1.py', options, function (err, results) { 
-			if (err) 
-				throw err;
-		});		
-		enabled = false;
-		console.log('Disabled Movement Detection.');
-		res.status(200).send();
+		fs.writeFile(dir, 'stop', function (err) {
+			if (err) throw err;
+			enabled = false;
+			res.status(200).send();
+		});
 	}
+});
+
+//================================
+// API-ROUTE FOR GETTING IMAGES
+//================================
+
+apiRoutes.get('/images', function(req, res) {
+
+	fs.readFile('/var/www/photo/movement_alert_04092016_1310-49.jpg', function(err, data) {
+		if (err) throw err; // Fail if the file can't be read.
+		res.writeHead(200, {'Content-Type': 'image/jpeg'});
+		res.end(data);
+	});
+});
+
+apiRoutes.get('/imagelist', function(req, res) {
+
+	fs.readdir('/var/www/photo/', function(err, files) {
+		if (err) throw err; // Fail if the file can't be read.
+		res.end(''+files);
+	});
 });
 
 app.use('/', apiRoutes);
 
 app.listen(port);
-*/
