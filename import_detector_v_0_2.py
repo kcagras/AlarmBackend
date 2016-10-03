@@ -10,16 +10,23 @@ SENSOR_PIN=23
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(SENSOR_PIN, GPIO.IN)
 
-
-
 def mein_callback(channel):
-
- #Optionaler Befehl, der bei Bewegung ausgeloest wird
-        print('Move detected')
-        subprocess.Popen(['python','/home/pi/mail_alarm.py'])
-        print u"1"
-        sysout.stdout.flush()
-        #tkMessageBox.showinfo('bla')
+	file = open('/home/pi/AlarmBackend/status.txt', 'r')
+	status = file.readline()
+	file.close()
+	print('Callback called, current status:', status)
+	
+	if status == 'start':
+		#Optionaler Befehl, der bei Bewegung ausgeloest wird
+		print('Move detected')
+		subprocess.Popen(['python','/home/pi/mail_alarm.py'])
+		subprocess.Popen(['bash', '/home/pi/AlarmBackend/photocapture1.sh'])
+		print u"1"
+	else:
+		print('Doing Nothing because status != start')
+	sysout.stdout.flush()
+	time.sleep(5000)
+	#tkMessageBox.showinfo('bla')
         
 try:
 	GPIO.add_event_detect(SENSOR_PIN, 

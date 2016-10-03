@@ -25,6 +25,19 @@ pyshell.on('message', function(msg) {
 
 });
 
+//================================
+// API-ROUTE TO GET STATUS
+//================================
+
+apiRoutes.get('/status', function(req, res) {
+	
+	fs.readFile('/home/pi/AlarmBackend/status.txt', function(err, data) {
+		if (err) throw err; // Fail if the file can't be read.
+		res.writeHead(200, {'Content-Type': 'text/plain'});
+		res.end(data);
+	});
+});
+
 
 //================================
 // API-ROUTE FOR ENDISABLING
@@ -53,8 +66,8 @@ apiRoutes.get('/endisable', function(req, res) {
 //================================
 
 apiRoutes.get('/images', function(req, res) {
-
-	fs.readFile('/var/www/photo/movement_alert_04092016_1310-49.jpg', function(err, data) {
+	
+	fs.readFile('/var/www/photo/'+req.query.name, function(err, data) {
 		if (err) throw err; // Fail if the file can't be read.
 		res.writeHead(200, {'Content-Type': 'image/jpeg'});
 		res.end(data);
