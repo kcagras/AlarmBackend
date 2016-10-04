@@ -8,6 +8,7 @@
     "mongoose": "^4.4.12",
     "mongoose-long": "^0.1.0",
     "morgan": "^1.7.0",
+    "node-gcm": "^0.14.4",
     "python-shell": "^0.4.0"
   }
 }
